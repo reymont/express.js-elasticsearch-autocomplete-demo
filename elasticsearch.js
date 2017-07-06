@@ -1,7 +1,7 @@
 var elasticsearch = require('elasticsearch');
 
 var elasticClient = new elasticsearch.Client({
-    host: 'localhost:9200',
+    host: '192.168.31.215:9200',
     log: 'info'
 });
 
@@ -56,6 +56,20 @@ function initMapping() {
     });
 }
 exports.initMapping = initMapping;
+
+function ping() {
+    return elasticClient.ping({
+        // ping usually has a 3000ms timeout 
+        requestTimeout: 1000
+        }, function (error) {
+        if (error) {
+            console.trace('elasticsearch cluster is down!');
+        } else {
+            console.log('All is well');
+        }
+    });
+}
+exports.ping = ping;
 
 function addDocument(document) {
     return elasticClient.index({
